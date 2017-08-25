@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyNumber.NET\MyNumber.NET.csproj" />
+    <ProjectReference Include="..\MyNumberNET\MyNumberNET.csproj" />
   </ItemGroup>
 
 </Project>
