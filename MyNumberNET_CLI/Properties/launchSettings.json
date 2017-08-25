@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "MyNumberNET_CLI": {
+      "commandName": "Project"
+    }
+  }
+}
