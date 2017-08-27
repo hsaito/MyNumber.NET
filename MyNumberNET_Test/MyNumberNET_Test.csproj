@@ -6,8 +6,8 @@
     <IsPackable>false</IsPackable>
     <Authors>Hideki Saito</Authors>
     <Company>Hideki Saito</Company>
-    <Product>MyNumber.NET_Test</Product>
-    <PackageId>MyNumber.NET_Test</PackageId>
+    <Product>MyNumberNET_Test</Product>
+    <PackageId>MyNumberNET_Test</PackageId>
     <Description>My Number for .NET (Unit Test)</Description>
     <Copyright>Copyright (c) 2017 Hideki Saito</Copyright>
     <PackageLicenseUrl>https://github.com/hsaito/MyNumber.NET/blob/master/LICENSE</PackageLicenseUrl>

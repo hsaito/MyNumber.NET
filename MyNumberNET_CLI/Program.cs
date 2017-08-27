@@ -29,7 +29,9 @@ namespace MyNumberNET_CLI
             {
                 log.Fatal("Not enough argument.");
                 log.Info("Usage: command [arg]");
-                log.Info("Commands: generate [count]/ check [My Number] / complete [first 11 digits of My Number] / range [minimum] [maximum]");
+                log.Info("Commands: generate [count]/ check [My Number] / complete [first 11 digits of My Number]");
+                log.Info("rangen [minimum] [maximum] / ranges [minimum [maximum]");
+                log.Info("Range functionss are rangen (numerical range), and ranges (sequential range)");
                 return -1;
             }
 
@@ -103,7 +105,7 @@ namespace MyNumberNET_CLI
                             return 0;
                         }
 
-                    case "range":
+                    case "rangen":
                         {
                             if (args.Length < 3)
                             {
@@ -116,20 +118,51 @@ namespace MyNumberNET_CLI
                                 log.Info("Input needs to be numberic.");
                                 return -1;
                             }
-                            if(args[1].Length > 12 || args[2].Length > 12)
+                            if (args[1].Length > 12 || args[2].Length > 12)
                             {
                                 log.Fatal("Invalid argument.");
                                 log.Info("Min and/or Max value(s) too large.");
                                 return -1;
                             }
-                            if(Convert.ToInt64(args[1]) > Convert.ToInt64(args[2]))
+                            if (Convert.ToInt64(args[1]) > Convert.ToInt64(args[2]))
                             {
                                 log.Fatal("Invalid argument.");
                                 log.Info("Max value must be larger than Min");
                                 return -1;
                             }
 
-                            Range(args[1], args[2]);
+                            RangeN(args[1], args[2]);
+
+                            return 0;
+                        }
+
+                    case "ranges":
+                        {
+                            if (args.Length < 3)
+                            {
+                                log.Fatal("Not enough argument.");
+                                log.Info("Supply two numbers for range.");
+                            }
+                            if (!Regex.IsMatch(args[1], @"^\d+$") || !Regex.IsMatch(args[2], @"^\d+$"))
+                            {
+                                log.Fatal("Invalid argument.");
+                                log.Info("Input needs to be numberic.");
+                                return -1;
+                            }
+                            if (args[1].Length > 11 || args[2].Length > 11)
+                            {
+                                log.Fatal("Invalid argument.");
+                                log.Info("Min and/or Max value(s) too large.");
+                                return -1;
+                            }
+                            if (Convert.ToInt64(args[1]) > Convert.ToInt64(args[2]))
+                            {
+                                log.Fatal("Invalid argument.");
+                                log.Info("Max value must be larger than Min");
+                                return -1;
+                            }
+
+                            RangeS(args[1], args[2]);
 
                             return 0;
                         }
@@ -202,10 +235,10 @@ namespace MyNumberNET_CLI
         /// </summary>
         /// <param name="min">Minimum value</param>
         /// <param name="max">Maximum value</param>
-        private static void Range(string min, string  max)
+        private static void RangeN(string min, string max)
         {
-            var min_filled = Fill(min);
-            var max_filled = Fill(max);
+            var min_filled = Fill(min, RangeMode.Numerical);
+            var max_filled = Fill(max, RangeMode.Numerical);
 
             log.Debug("Filled min: " + min_filled);
             log.Debug("Filled max: " + max_filled);
@@ -224,20 +257,67 @@ namespace MyNumberNET_CLI
                 }
                 value = Increment(value);
 
-            } while (!Compare(value, stop) && value != null);
+            } while (!Compare(value, stop, RangeMode.Numerical) && value != null);
         }
+
+        /// <summary>
+        /// Generate "My Number" of range specified
+        /// </summary>
+        /// <param name="min">Minimum value</param>
+        /// <param name="max">Maximum value</param>
+        private static void RangeS(string min, string max)
+        {
+            var min_filled = Fill(min, RangeMode.Sequential);
+            var max_filled = Fill(max, RangeMode.Sequential);
+
+            log.Debug("Filled min: " + min_filled);
+            log.Debug("Filled max: " + max_filled);
+
+
+            int[] value = Array.ConvertAll(min_filled.ToCharArray(), c => (int)Char.GetNumericValue(c));
+            int[] stop = Array.ConvertAll(max_filled.ToCharArray(), c => (int)Char.GetNumericValue(c));
+
+            var n = new MyNumber();
+
+            do
+            {
+                var check_digit = n.CalculateCheckDigits(value);
+                Console.WriteLine(string.Join("", value)+check_digit.ToString());
+                value = Increment(value);
+
+            } while (!Compare(value, stop, RangeMode.Sequential) && value != null);
+        }
+
+        private enum RangeMode { Numerical, Sequential }
 
         /// <summary>
         /// Fill the value to 12 didits
         /// </summary>
         /// <param name="input">Digits to fill</param>
         /// <returns>Value filled to 12 digits</returns>
-        private static string Fill(string input)
+        private static string Fill(string input, RangeMode mode)
         {
-            var reminder = 12 - input.Length;
-            if(reminder != 0)
+            int reminder = 12;
+
+            switch (mode)
             {
-                for(int i = 0; i < reminder; i++)
+                case RangeMode.Numerical:
+                    {
+                        reminder = 12;
+                        break;
+                    }
+
+                case RangeMode.Sequential:
+                    {
+                        reminder = 11;
+                        break;
+                    }
+            }
+
+            reminder = reminder - input.Length;
+            if (reminder != 0)
+            {
+                for (int i = 0; i < reminder; i++)
                 {
                     input = "0" + input;
                 }
@@ -251,9 +331,26 @@ namespace MyNumberNET_CLI
         /// <param name="first">First value</param>
         /// <param name="second">Second value</param>
         /// <returns>Result of the comparison</returns>
-        private static bool Compare(int[] first, int[] second)
+        private static bool Compare(int[] first, int[] second, RangeMode mode)
         {
-            for(int i = 0; i < 12; i++)
+            int reminder = 12;
+
+            switch (mode)
+            {
+                case RangeMode.Numerical:
+                    {
+                        reminder = 12;
+                        break;
+                    }
+
+                case RangeMode.Sequential:
+                    {
+                        reminder = 11;
+                        break;
+                    }
+            }
+
+            for (int i = 0; i < reminder; i++)
             {
                 if (first[i] != second[i])
                     return false;
@@ -269,12 +366,14 @@ namespace MyNumberNET_CLI
         private static int[] Increment(int[] input)
         {
             Array.Reverse(input);
+            int digits = input.Length;
+
             input[0]++;
-            for(int i = 0; i < 12; i++)
+            for (int i = 0; i < digits; i++)
             {
-                if(input[i] > 9)
+                if (input[i] > 9)
                 {
-                    if(i+1 > 11)
+                    if (i + 1 > digits - 1)
                     {
                         return null;
                     }

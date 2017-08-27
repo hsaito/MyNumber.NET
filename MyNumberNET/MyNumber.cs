@@ -54,7 +54,7 @@ namespace MyNumberNET
                 // From digit 7 to 11, sum is n-5
                 sum += (n - 5) * number[n - 1];
             }
-
+            Array.Reverse(number);
             // Calculate against MOD
             if (sum % 11 <= 1)
                 return 0;
