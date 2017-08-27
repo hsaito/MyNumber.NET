@@ -1,7 +1,8 @@
 {
   "profiles": {
     "MyNumberNET_CLI": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "ranges 0 1000"
     }
   }
 }
