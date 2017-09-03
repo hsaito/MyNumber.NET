@@ -5,7 +5,7 @@ namespace MyNumberNET
     public class MyNumber
     {
         // Centralized random number pool
-        private Random random = new Random();
+        private readonly Random _random = new Random();
 
         /// <summary>
         /// Verify "My Number" if it is a valid number
@@ -19,9 +19,9 @@ namespace MyNumberNET
                 throw new MyNumberMalformedException("Malformed sequence. Must be 12 digits.");
             }
 
-            var check_digit = CalculateCheckDigits(Truncate(number));
+            var checkDigit = CalculateCheckDigits(Truncate(number));
 
-            if (number[11] == check_digit)
+            if (number[11] == checkDigit)
                 return true;
             else
                 return false;
@@ -70,7 +70,7 @@ namespace MyNumberNET
         {
             var result = new int[12];
             for (int i = 0; i < 10; i++)
-                result[i] = random.Next(0, 9);
+                result[i] = _random.Next(0, 9);
 
             result[11] = CalculateCheckDigits(Truncate(result));
             return result;

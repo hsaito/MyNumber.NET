@@ -14,8 +14,8 @@ namespace MyNumberNET_Test
 
             for (int i = 0; i < 100; i++)
             {
-                var r_seq = n.GenerateRandomNumber();
-                var check = n.VerifyNumber(r_seq);
+                var rSeq = n.GenerateRandomNumber();
+                var check = n.VerifyNumber(rSeq);
                 if(check == false)
                     throw new Exception();
             }

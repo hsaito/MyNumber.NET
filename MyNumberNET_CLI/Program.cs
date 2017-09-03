@@ -12,26 +12,28 @@ namespace MyNumberNET_CLI
 {
     class Program
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
         static int Main(string[] args)
         {
             try
             {
-                InitializeLogging();
+                var result = InitializeLogging();
+                if(!result)
+                    throw new Exception("Logging could not be enabled.");
             }
             catch (Exception ex)
             {
-                log.Fatal(ex.Message);
+                Log.Fatal(ex.Message);
                 return -1;
             }
 
             if (args.Length < 1)
             {
-                log.Fatal("Not enough argument.");
-                log.Info("Usage: command [arg]");
-                log.Info("Commands: generate [count]/ check [My Number] / complete [first 11 digits of My Number]");
-                log.Info("rangen [minimum] [maximum] / ranges [minimum [maximum]");
-                log.Info("Range functionss are rangen (numerical range), and ranges (sequential range)");
+                Log.Fatal("Not enough argument.");
+                Log.Info("Usage: command [arg]");
+                Log.Info("Commands: generate [count]/ check [My Number] / complete [first 11 digits of My Number]");
+                Log.Info("rangen [minimum] [maximum] / ranges [minimum [maximum]");
+                Log.Info("Range functionss are rangen (numerical range), and ranges (sequential range)");
                 return -1;
             }
 
@@ -50,8 +52,8 @@ namespace MyNumberNET_CLI
                         {
                             if (!Regex.IsMatch(args[1], @"^\d+$"))
                             {
-                                log.Fatal("Invalid argument.");
-                                log.Info("Input needs to be numberic.");
+                                Log.Fatal("Invalid argument.");
+                                Log.Info("Input needs to be numberic.");
                                 return -1;
 
                             }
@@ -63,14 +65,14 @@ namespace MyNumberNET_CLI
                     case "check":
                         if (args.Length < 2)
                         {
-                            log.Fatal("Not enough argument.");
-                            log.Info("Supply \"My Number\" to check");
+                            Log.Fatal("Not enough argument.");
+                            Log.Info("Supply \"My Number\" to check");
                             return -1;
                         }
                         if (!Regex.IsMatch(args[1], @"^\d+$"))
                         {
-                            log.Fatal("Invalid argument.");
-                            log.Info("Input needs to be numberic.");
+                            Log.Fatal("Invalid argument.");
+                            Log.Info("Input needs to be numberic.");
                             return -1;
 
                         }
@@ -89,14 +91,14 @@ namespace MyNumberNET_CLI
                         {
                             if (args.Length < 2)
                             {
-                                log.Fatal("Not enough argument.");
-                                log.Info("Supply the first 11 digits of \"My Number\" to complete");
+                                Log.Fatal("Not enough argument.");
+                                Log.Info("Supply the first 11 digits of \"My Number\" to complete");
                                 return -1;
                             }
                             if (!Regex.IsMatch(args[1], @"^\d+$"))
                             {
-                                log.Fatal("Invalid argument.");
-                                log.Info("Input needs to be numberic.");
+                                Log.Fatal("Invalid argument.");
+                                Log.Info("Input needs to be numberic.");
                                 return -1;
 
                             }
@@ -109,25 +111,25 @@ namespace MyNumberNET_CLI
                         {
                             if (args.Length < 3)
                             {
-                                log.Fatal("Not enough argument.");
-                                log.Info("Supply two numbers for range.");
+                                Log.Fatal("Not enough argument.");
+                                Log.Info("Supply two numbers for range.");
                             }
                             if (!Regex.IsMatch(args[1], @"^\d+$") || !Regex.IsMatch(args[2], @"^\d+$"))
                             {
-                                log.Fatal("Invalid argument.");
-                                log.Info("Input needs to be numberic.");
+                                Log.Fatal("Invalid argument.");
+                                Log.Info("Input needs to be numberic.");
                                 return -1;
                             }
                             if (args[1].Length > 12 || args[2].Length > 12)
                             {
-                                log.Fatal("Invalid argument.");
-                                log.Info("Min and/or Max value(s) too large.");
+                                Log.Fatal("Invalid argument.");
+                                Log.Info("Min and/or Max value(s) too large.");
                                 return -1;
                             }
                             if (Convert.ToInt64(args[1]) > Convert.ToInt64(args[2]))
                             {
-                                log.Fatal("Invalid argument.");
-                                log.Info("Max value must be larger than Min");
+                                Log.Fatal("Invalid argument.");
+                                Log.Info("Max value must be larger than Min");
                                 return -1;
                             }
 
@@ -140,25 +142,25 @@ namespace MyNumberNET_CLI
                         {
                             if (args.Length < 3)
                             {
-                                log.Fatal("Not enough argument.");
-                                log.Info("Supply two numbers for range.");
+                                Log.Fatal("Not enough argument.");
+                                Log.Info("Supply two numbers for range.");
                             }
                             if (!Regex.IsMatch(args[1], @"^\d+$") || !Regex.IsMatch(args[2], @"^\d+$"))
                             {
-                                log.Fatal("Invalid argument.");
-                                log.Info("Input needs to be numberic.");
+                                Log.Fatal("Invalid argument.");
+                                Log.Info("Input needs to be numberic.");
                                 return -1;
                             }
                             if (args[1].Length > 11 || args[2].Length > 11)
                             {
-                                log.Fatal("Invalid argument.");
-                                log.Info("Min and/or Max value(s) too large.");
+                                Log.Fatal("Invalid argument.");
+                                Log.Info("Min and/or Max value(s) too large.");
                                 return -1;
                             }
                             if (Convert.ToInt64(args[1]) > Convert.ToInt64(args[2]))
                             {
-                                log.Fatal("Invalid argument.");
-                                log.Info("Max value must be larger than Min");
+                                Log.Fatal("Invalid argument.");
+                                Log.Info("Max value must be larger than Min");
                                 return -1;
                             }
 
@@ -170,8 +172,8 @@ namespace MyNumberNET_CLI
             }
             catch (Exception ex)
             {
-                log.Fatal(ex.Message);
-                log.Debug(ex.StackTrace);
+                Log.Fatal(ex.Message);
+                Log.Debug(ex.StackTrace);
                 return -1;
             }
             return -1;
@@ -181,7 +183,7 @@ namespace MyNumberNET_CLI
         /// Generate "My Number"
         /// </summary>
         /// <param name="count">Count of "My Number"</param>
-        static private void Generate(Int64 count)
+        private static void Generate(Int64 count)
         {
             var n = new MyNumber();
             for (int i = 0; i < count; i++)
@@ -195,7 +197,7 @@ namespace MyNumberNET_CLI
         /// </summary>
         /// <param name="number">"My Number" to check</param>
         /// <returns>Validation result</returns>
-        static private bool Check(string number)
+        private static bool Check(string number)
         {
             var n = new MyNumber();
             var sanitized = Sanitize(number);
@@ -237,15 +239,15 @@ namespace MyNumberNET_CLI
         /// <param name="max">Maximum value</param>
         private static void RangeN(string min, string max)
         {
-            var min_filled = Fill(min, RangeMode.Numerical);
-            var max_filled = Fill(max, RangeMode.Numerical);
+            var minFilled = Fill(min, RangeMode.Numerical);
+            var maxFilled = Fill(max, RangeMode.Numerical);
 
-            log.Debug("Filled min: " + min_filled);
-            log.Debug("Filled max: " + max_filled);
+            Log.Debug("Filled min: " + minFilled);
+            Log.Debug("Filled max: " + maxFilled);
 
 
-            int[] value = Array.ConvertAll(min_filled.ToCharArray(), c => (int)Char.GetNumericValue(c));
-            int[] stop = Array.ConvertAll(max_filled.ToCharArray(), c => (int)Char.GetNumericValue(c));
+            int[] value = Array.ConvertAll(minFilled.ToCharArray(), c => (int)Char.GetNumericValue(c));
+            int[] stop = Array.ConvertAll(maxFilled.ToCharArray(), c => (int)Char.GetNumericValue(c));
 
             var n = new MyNumber();
 
@@ -267,22 +269,22 @@ namespace MyNumberNET_CLI
         /// <param name="max">Maximum value</param>
         private static void RangeS(string min, string max)
         {
-            var min_filled = Fill(min, RangeMode.Sequential);
-            var max_filled = Fill(max, RangeMode.Sequential);
+            var minFilled = Fill(min, RangeMode.Sequential);
+            var maxFilled = Fill(max, RangeMode.Sequential);
 
-            log.Debug("Filled min: " + min_filled);
-            log.Debug("Filled max: " + max_filled);
+            Log.Debug("Filled min: " + minFilled);
+            Log.Debug("Filled max: " + maxFilled);
 
 
-            int[] value = Array.ConvertAll(min_filled.ToCharArray(), c => (int)Char.GetNumericValue(c));
-            int[] stop = Array.ConvertAll(max_filled.ToCharArray(), c => (int)Char.GetNumericValue(c));
+            int[] value = Array.ConvertAll(minFilled.ToCharArray(), c => (int)Char.GetNumericValue(c));
+            int[] stop = Array.ConvertAll(maxFilled.ToCharArray(), c => (int)Char.GetNumericValue(c));
 
             var n = new MyNumber();
 
             do
             {
-                var check_digit = n.CalculateCheckDigits(value);
-                Console.WriteLine(string.Join("", value)+check_digit.ToString());
+                var checkDigit = n.CalculateCheckDigits(value);
+                Console.WriteLine(string.Join("", value)+checkDigit.ToString());
                 value = Increment(value);
 
             } while (!Compare(value, stop, RangeMode.Sequential) && value != null);
@@ -294,6 +296,7 @@ namespace MyNumberNET_CLI
         /// Fill the value to 12 didits
         /// </summary>
         /// <param name="input">Digits to fill</param>
+        /// <param name="mode">Mode of operation</param>
         /// <returns>Value filled to 12 digits</returns>
         private static string Fill(string input, RangeMode mode)
         {
@@ -330,6 +333,7 @@ namespace MyNumberNET_CLI
         /// </summary>
         /// <param name="first">First value</param>
         /// <param name="second">Second value</param>
+        /// <param name="mode">Mode of operation</param>
         /// <returns>Result of the comparison</returns>
         private static bool Compare(int[] first, int[] second, RangeMode mode)
         {
@@ -393,15 +397,15 @@ namespace MyNumberNET_CLI
             try
             {
                 // Configuration for logging
-                XmlDocument log4netConfig = new XmlDocument();
+                XmlDocument log4NetConfig = new XmlDocument();
 
                 using (StreamReader reader = new StreamReader(new FileStream("log4net.config", FileMode.Open, FileAccess.Read)))
                 {
-                    log4netConfig.Load(reader);
+                    log4NetConfig.Load(reader);
                 }
 
-                ILoggerRepository rep = log4net.LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(log4net.Repository.Hierarchy.Hierarchy));
-                XmlConfigurator.Configure(rep, log4netConfig["log4net"]);
+                ILoggerRepository rep = LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(log4net.Repository.Hierarchy.Hierarchy));
+                XmlConfigurator.Configure(rep, log4NetConfig["log4net"]);
                 return true;
             }
             catch (Exception ex)
