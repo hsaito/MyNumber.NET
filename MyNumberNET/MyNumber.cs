@@ -11,6 +11,7 @@ namespace MyNumberNET
         /// Verify "My Number" if it is a valid number
         /// </summary>
         /// <param name="number">Array of "My Number" digits</param>
+        /// <exception cref="MyNumberMalformedException">Thrown when the provided number is malformed</exception>
         /// <returns>Whether it is a valid "My Number" sequence</returns>
         public bool VerifyNumber(int[] number)
         {
@@ -31,6 +32,7 @@ namespace MyNumberNET
         /// Calculate check digits from the first 11 digits of "My Number"
         /// </summary>
         /// <param name="number">Array of first 11 "My Number" digits</param>
+        /// <exception cref="MyNumberMalformedException">Thrown when the provided number is malformed</exception>
         /// <returns>Check digit for the "My Number" supplied</returns>
         public int CalculateCheckDigits(int[] number)
         {
@@ -80,6 +82,7 @@ namespace MyNumberNET
         /// Truncate "My Number" digit
         /// </summary>
         /// <param name="number">Array of "My Number" digits</param>
+        /// <exception cref="MyNumberMalformedException">Thrown when the provided number is malformed</exception>
         /// <returns></returns>
         private int[] Truncate(int[] number)
         {
