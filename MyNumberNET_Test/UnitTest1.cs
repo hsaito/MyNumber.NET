@@ -12,10 +12,10 @@ namespace MyNumberNET_Test
         {
             var n = new MyNumber();
 
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 var rSeq = n.GenerateRandomNumber();
-                var check = n.VerifyNumber(rSeq);
+                var check = MyNumber.VerifyNumber(rSeq);
                 if(check == false)
                     throw new Exception();
             }
@@ -24,18 +24,17 @@ namespace MyNumberNET_Test
         [TestMethod]
         public void SampleTest()
         {
-            var n = new MyNumber();
             var subject = "123456789010".ToCharArray();
-            int[] value = Array.ConvertAll(subject, c => (int)Char.GetNumericValue(c));
+            var value = Array.ConvertAll(subject, c => (int)char.GetNumericValue(c));
 
-            for(int i = 0; i < 11; i++)
+            for(var i = 0; i < 11; i++)
             {
                 value[11] = i;
-                if(i == 8 && n.VerifyNumber(value))
+                if(i == 8 && MyNumber.VerifyNumber(value))
                 {
                     // This is OK
                 }
-                else if (n.VerifyNumber(value))
+                else if (MyNumber.VerifyNumber(value))
                     throw new Exception();
             }
 

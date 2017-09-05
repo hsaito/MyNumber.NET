@@ -1,19 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Xml;
 using log4net;
 using log4net.Config;
-using log4net.Repository;
 using MyNumberNET;
 using System.Text.RegularExpressions;
+using static System.Char;
 
 namespace MyNumberNET_CLI
 {
-    class Program
+    public class Program
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
-        static int Main(string[] args)
+        public static int Main(string[] args)
         {
             try
             {
@@ -168,6 +169,9 @@ namespace MyNumberNET_CLI
 
                             return 0;
                         }
+                        
+                    default:
+                        throw new ArgumentOutOfRangeException(args[0]);
                 }
             }
             catch (Exception ex)
@@ -176,17 +180,16 @@ namespace MyNumberNET_CLI
                 Log.Debug(ex.StackTrace);
                 return -1;
             }
-            return -1;
         }
 
         /// <summary>
         /// Generate "My Number"
         /// </summary>
         /// <param name="count">Count of "My Number"</param>
-        private static void Generate(Int64 count)
+        private static void Generate(long count)
         {
             var n = new MyNumber();
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 Console.WriteLine(string.Join("", n.GenerateRandomNumber()));
             }
@@ -199,10 +202,9 @@ namespace MyNumberNET_CLI
         /// <returns>Validation result</returns>
         private static bool Check(string number)
         {
-            var n = new MyNumber();
             var sanitized = Sanitize(number);
 
-            return n.VerifyNumber(sanitized);
+            return MyNumber.VerifyNumber(sanitized);
         }
 
         /// <summary>
@@ -210,13 +212,11 @@ namespace MyNumberNET_CLI
         /// </summary>
         /// <param name="number">First 11 digits of "My Number"</param>
         /// <returns>Resulting "My Number"</returns>
-        static string Complete(string number)
+        private static string Complete(string number)
         {
-            var n = new MyNumber();
-
             var sanitized = Sanitize(number);
 
-            var sum = n.CalculateCheckDigits(sanitized);
+            var sum = MyNumber.CalculateCheckDigits(sanitized);
             return number + sum;
         }
 
@@ -228,7 +228,7 @@ namespace MyNumberNET_CLI
         private static int[] Sanitize(string number)
         {
             var subject = number.ToCharArray();
-            int[] value = Array.ConvertAll(subject, c => (int)Char.GetNumericValue(c));
+            var value = Array.ConvertAll(subject, c => (int)GetNumericValue(c));
             return value;
         }
 
@@ -246,14 +246,12 @@ namespace MyNumberNET_CLI
             Log.Debug("Filled max: " + maxFilled);
 
 
-            int[] value = Array.ConvertAll(minFilled.ToCharArray(), c => (int)Char.GetNumericValue(c));
-            int[] stop = Array.ConvertAll(maxFilled.ToCharArray(), c => (int)Char.GetNumericValue(c));
-
-            var n = new MyNumber();
+            var value = Array.ConvertAll(minFilled.ToCharArray(), c => (int)GetNumericValue(c));
+            var stop = Array.ConvertAll(maxFilled.ToCharArray(), c => (int)GetNumericValue(c));
 
             do
             {
-                if (n.VerifyNumber(value))
+                if (MyNumber.VerifyNumber(value))
                 {
                     Console.WriteLine(string.Join("", value));
                 }
@@ -276,15 +274,13 @@ namespace MyNumberNET_CLI
             Log.Debug("Filled max: " + maxFilled);
 
 
-            int[] value = Array.ConvertAll(minFilled.ToCharArray(), c => (int)Char.GetNumericValue(c));
-            int[] stop = Array.ConvertAll(maxFilled.ToCharArray(), c => (int)Char.GetNumericValue(c));
-
-            var n = new MyNumber();
+            var value = Array.ConvertAll(minFilled.ToCharArray(), c => (int)GetNumericValue(c));
+            var stop = Array.ConvertAll(maxFilled.ToCharArray(), c => (int)GetNumericValue(c));
 
             do
             {
-                var checkDigit = n.CalculateCheckDigits(value);
-                Console.WriteLine(string.Join("", value)+checkDigit.ToString());
+                var checkDigit = MyNumber.CalculateCheckDigits(value);
+                Console.WriteLine(string.Join("", value)+checkDigit);
                 value = Increment(value);
 
             } while (!Compare(value, stop, RangeMode.Sequential) && value != null);
@@ -300,7 +296,7 @@ namespace MyNumberNET_CLI
         /// <returns>Value filled to 12 digits</returns>
         private static string Fill(string input, RangeMode mode)
         {
-            int reminder = 12;
+            int reminder;
 
             switch (mode)
             {
@@ -315,15 +311,15 @@ namespace MyNumberNET_CLI
                         reminder = 11;
                         break;
                     }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
             }
 
             reminder = reminder - input.Length;
-            if (reminder != 0)
+            if (reminder == 0) return input;
+            for (var i = 0; i < reminder; i++)
             {
-                for (int i = 0; i < reminder; i++)
-                {
-                    input = "0" + input;
-                }
+                input = "0" + input;
             }
             return input;
         }
@@ -335,9 +331,9 @@ namespace MyNumberNET_CLI
         /// <param name="second">Second value</param>
         /// <param name="mode">Mode of operation</param>
         /// <returns>Result of the comparison</returns>
-        private static bool Compare(int[] first, int[] second, RangeMode mode)
+        private static bool Compare(IReadOnlyList<int> first, IReadOnlyList<int> second, RangeMode mode)
         {
-            int reminder = 12;
+            int reminder;
 
             switch (mode)
             {
@@ -352,9 +348,11 @@ namespace MyNumberNET_CLI
                         reminder = 11;
                         break;
                     }
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
             }
 
-            for (int i = 0; i < reminder; i++)
+            for (var i = 0; i < reminder; i++)
             {
                 if (first[i] != second[i])
                     return false;
@@ -370,20 +368,18 @@ namespace MyNumberNET_CLI
         private static int[] Increment(int[] input)
         {
             Array.Reverse(input);
-            int digits = input.Length;
+            var digits = input.Length;
 
             input[0]++;
-            for (int i = 0; i < digits; i++)
+            for (var i = 0; i < digits; i++)
             {
-                if (input[i] > 9)
+                if (input[i] <= 9) continue;
+                if (i + 1 > digits - 1)
                 {
-                    if (i + 1 > digits - 1)
-                    {
-                        return null;
-                    }
-                    input[i + 1]++;
-                    input[i] = 0;
+                    return null;
                 }
+                input[i + 1]++;
+                input[i] = 0;
             }
             Array.Reverse(input);
             return input;
@@ -397,14 +393,14 @@ namespace MyNumberNET_CLI
             try
             {
                 // Configuration for logging
-                XmlDocument log4NetConfig = new XmlDocument();
+                var log4NetConfig = new XmlDocument();
 
-                using (StreamReader reader = new StreamReader(new FileStream("log4net.config", FileMode.Open, FileAccess.Read)))
+                using (var reader = new StreamReader(new FileStream("log4net.config", FileMode.Open, FileAccess.Read)))
                 {
                     log4NetConfig.Load(reader);
                 }
 
-                ILoggerRepository rep = LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(log4net.Repository.Hierarchy.Hierarchy));
+                var rep = LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(log4net.Repository.Hierarchy.Hierarchy));
                 XmlConfigurator.Configure(rep, log4NetConfig["log4net"]);
                 return true;
             }
