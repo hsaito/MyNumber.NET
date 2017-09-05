@@ -16,7 +16,7 @@ namespace MyNumberNET_Test
             {
                 var rSeq = n.GenerateRandomNumber();
                 var check = MyNumber.VerifyNumber(rSeq);
-                if(check == false)
+                if (check == false)
                     throw new Exception();
             }
         }
@@ -25,19 +25,20 @@ namespace MyNumberNET_Test
         public void SampleTest()
         {
             var subject = "123456789010".ToCharArray();
-            var value = Array.ConvertAll(subject, c => (int)char.GetNumericValue(c));
+            var value = Array.ConvertAll(subject, c => (int) char.GetNumericValue(c));
 
-            for(var i = 0; i < 11; i++)
+            for (var i = 0; i < 11; i++)
             {
                 value[11] = i;
-                if(i == 8 && MyNumber.VerifyNumber(value))
+                if (i == 8 && MyNumber.VerifyNumber(value))
                 {
                     // This is OK
                 }
                 else if (MyNumber.VerifyNumber(value))
+                {
                     throw new Exception();
+                }
             }
-
         }
     }
 }

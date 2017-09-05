@@ -9,7 +9,7 @@ namespace MyNumberNET
         private readonly Random _random = new Random();
 
         /// <summary>
-        /// Verify "My Number" if it is a valid number
+        ///     Verify "My Number" if it is a valid number
         /// </summary>
         /// <param name="number">Array of "My Number" digits</param>
         /// <exception cref="MyNumberMalformedException">Thrown when the provided number is malformed</exception>
@@ -17,9 +17,7 @@ namespace MyNumberNET
         public static bool VerifyNumber(int[] number)
         {
             if (number.Length != 12)
-            {
                 throw new MyNumberMalformedException("Malformed sequence. Must be 12 digits.");
-            }
 
             var checkDigit = CalculateCheckDigits(Truncate(number));
 
@@ -27,7 +25,7 @@ namespace MyNumberNET
         }
 
         /// <summary>
-        /// Calculate check digits from the first 11 digits of "My Number"
+        ///     Calculate check digits from the first 11 digits of "My Number"
         /// </summary>
         /// <param name="number">Array of first 11 "My Number" digits</param>
         /// <exception cref="MyNumberMalformedException">Thrown when the provided number is malformed</exception>
@@ -35,25 +33,19 @@ namespace MyNumberNET
         public static int CalculateCheckDigits(int[] number)
         {
             if (number.Length != 11)
-            {
                 throw new MyNumberMalformedException("Malformed sequence. Must be 11 digits.");
-            }
 
             // They count their digits high to low, so reorder it
             Array.Reverse(number);
 
             var sum = 0;
             for (var n = 1; n < 7; n++)
-            {
                 // From digit 1 to 6, sum is n+1
                 sum += (n + 1) * number[n - 1];
-            }
 
             for (var n = 7; n < 12; n++)
-            {
                 // From digit 7 to 11, sum is n-5
                 sum += (n - 5) * number[n - 1];
-            }
             Array.Reverse(number);
             // Calculate against MOD
             if (sum % 11 <= 1)
@@ -62,7 +54,7 @@ namespace MyNumberNET
         }
 
         /// <summary>
-        /// Generate random "My Number" sequence
+        ///     Generate random "My Number" sequence
         /// </summary>
         /// <returns>Random "My Number" sequence</returns>
         public int[] GenerateRandomNumber()
@@ -76,7 +68,7 @@ namespace MyNumberNET
         }
 
         /// <summary>
-        /// Truncate "My Number" digit
+        ///     Truncate "My Number" digit
         /// </summary>
         /// <param name="number">Array of "My Number" digits</param>
         /// <exception cref="MyNumberMalformedException">Thrown when the provided number is malformed</exception>
@@ -84,14 +76,10 @@ namespace MyNumberNET
         private static int[] Truncate(IReadOnlyList<int> number)
         {
             if (number.Count < 11 || number.Count > 12)
-            {
                 throw new MyNumberMalformedException("Malformed sequence. Must be 11 or 12 digits.");
-            }
             var result = new int[11];
             for (var i = 0; i < 11; i++)
-            {
                 result[i] = number[i];
-            }
             return result;
         }
 
@@ -112,7 +100,7 @@ namespace MyNumberNET
             {
             }
         }
-        
+
         #endregion
     }
 }
