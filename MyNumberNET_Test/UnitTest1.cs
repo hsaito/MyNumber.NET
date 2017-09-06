@@ -12,11 +12,11 @@ namespace MyNumberNET_Test
         {
             var n = new MyNumber();
 
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
-                var r_seq = n.GenerateRandomNumber();
-                var check = n.VerifyNumber(r_seq);
-                if(check == false)
+                var rSeq = n.GenerateRandomNumber();
+                var check = MyNumber.VerifyNumber(rSeq);
+                if (check == false)
                     throw new Exception();
             }
         }
@@ -24,21 +24,22 @@ namespace MyNumberNET_Test
         [TestMethod]
         public void SampleTest()
         {
-            var n = new MyNumber();
-            var subject = "123456789010".ToCharArray();
-            int[] value = Array.ConvertAll(subject, c => (int)Char.GetNumericValue(c));
-
-            for(int i = 0; i < 11; i++)
+            // Some randomly generated array of My Numbers
+            var subjectarray = new[]
             {
-                value[11] = i;
-                if(i == 8 && n.VerifyNumber(value))
-                {
-                    // This is OK
-                }
-                else if (n.VerifyNumber(value))
-                    throw new Exception();
-            }
+                "614106526000", "510136263801", "060122228102",
+                "362473502703", "467430101604", "763727588705",
+                "734220726006", "450817747707", "207304711608",
+                "407508284309"
+            };
 
+            foreach (var item in subjectarray)
+            {
+                var subject = item.ToCharArray();
+                var value = Array.ConvertAll(subject, c => (int) char.GetNumericValue(c));
+                if(!MyNumber.VerifyNumber(value))
+                    throw new Exception("Validation failed.");
+            }
         }
     }
 }
