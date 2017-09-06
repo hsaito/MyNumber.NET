@@ -24,20 +24,21 @@ namespace MyNumberNET_Test
         [TestMethod]
         public void SampleTest()
         {
-            var subject = "123456789010".ToCharArray();
-            var value = Array.ConvertAll(subject, c => (int) char.GetNumericValue(c));
-
-            for (var i = 0; i < 11; i++)
+            // Some randomly generated array of My Numbers
+            var subjectarray = new[]
             {
-                value[11] = i;
-                if (i == 8 && MyNumber.VerifyNumber(value))
-                {
-                    // This is OK
-                }
-                else if (MyNumber.VerifyNumber(value))
-                {
-                    throw new Exception();
-                }
+                "614106526000", "510136263801", "060122228102",
+                "362473502703", "467430101604", "763727588705",
+                "734220726006", "450817747707", "207304711608",
+                "407508284309"
+            };
+
+            foreach (var item in subjectarray)
+            {
+                var subject = item.ToCharArray();
+                var value = Array.ConvertAll(subject, c => (int) char.GetNumericValue(c));
+                if(!MyNumber.VerifyNumber(value))
+                    throw new Exception("Validation failed.");
             }
         }
     }
