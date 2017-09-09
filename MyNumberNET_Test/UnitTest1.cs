@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyNumberNET;
 
@@ -33,12 +34,27 @@ namespace MyNumberNET_Test
                 "407508284309"
             };
 
-            foreach (var item in subjectarray)
+            if (subjectarray.Select(item => item.ToCharArray()).Select(subject => Array.ConvertAll(subject, c => (int) char.GetNumericValue(c))).Any(value => !MyNumber.VerifyNumber(value)))
             {
-                var subject = item.ToCharArray();
-                var value = Array.ConvertAll(subject, c => (int) char.GetNumericValue(c));
-                if(!MyNumber.VerifyNumber(value))
-                    throw new Exception("Validation failed.");
+                throw new Exception("Validation failed.");
+            }
+        }
+
+        [TestMethod]
+        public void InvalidTest()
+        {
+            // Some randomly generated array of My Numbers (Invalid ones)
+            var subjectarray = new[]
+            {
+                "614106526006", "510136263805", "060122228103",
+                "362473502704", "467430101602", "763727588707",
+                "734220726004", "450817747706", "207304711604",
+                "407508284302"
+            };
+
+            if (subjectarray.Select(item => item.ToCharArray()).Select(subject => Array.ConvertAll(subject, c => (int) char.GetNumericValue(c))).Any(MyNumber.VerifyNumber))
+            {
+                throw new Exception("Validation failed.");
             }
         }
     }
