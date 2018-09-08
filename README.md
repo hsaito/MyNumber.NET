@@ -1,6 +1,6 @@
 # My Number Library for .NET
 
-This library facilitates validation of the [My Number](http://www.cao.go.jp/bangouseido/).
+This library facilitates validation of the [My Number](http://www.cao.go.jp/bangouseido/), also known as Social Security and Tax Number System. 
 
 ## MyNumber.NET
 
