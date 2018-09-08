@@ -4,6 +4,7 @@
     <IsPackable>false</IsPackable>
     <Authors>Hideki Saito</Authors>
     <Company>Hideki Saito</Company>
+    <Title>MyNumberNet My Number Validation Unit Tests</Title>
     <Product>MyNumberNET_Test</Product>
     <PackageId>MyNumberNET_Test</PackageId>
     <Description>My Number for .NET (Unit Test)</Description>
