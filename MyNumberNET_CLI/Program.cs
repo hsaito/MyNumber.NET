@@ -70,12 +70,14 @@ namespace MyNumberNET_CLI
                             Log.Info("Supply \"My Number\" to check");
                             return -1;
                         }
+
                         if (!Regex.IsMatch(args[1], @"^\d+$"))
                         {
                             Log.Fatal("Invalid argument.");
                             Log.Info("Input needs to be numberic.");
                             return -1;
                         }
+
                         if (Check(args[1]))
                         {
                             Console.WriteLine("OK");
@@ -95,6 +97,7 @@ namespace MyNumberNET_CLI
                             Log.Info("Supply the first 11 digits of \"My Number\" to complete");
                             return -1;
                         }
+
                         if (!Regex.IsMatch(args[1], @"^\d+$"))
                         {
                             Log.Fatal("Invalid argument.");
@@ -113,18 +116,21 @@ namespace MyNumberNET_CLI
                             Log.Fatal("Not enough argument.");
                             Log.Info("Supply two numbers for range.");
                         }
+
                         if (!Regex.IsMatch(args[1], @"^\d+$") || !Regex.IsMatch(args[2], @"^\d+$"))
                         {
                             Log.Fatal("Invalid argument.");
                             Log.Info("Input needs to be numberic.");
                             return -1;
                         }
+
                         if (args[1].Length > 12 || args[2].Length > 12)
                         {
                             Log.Fatal("Invalid argument.");
                             Log.Info("Min and/or Max value(s) too large.");
                             return -1;
                         }
+
                         if (Convert.ToInt64(args[1]) > Convert.ToInt64(args[2]))
                         {
                             Log.Fatal("Invalid argument.");
@@ -144,18 +150,21 @@ namespace MyNumberNET_CLI
                             Log.Fatal("Not enough argument.");
                             Log.Info("Supply two numbers for range.");
                         }
+
                         if (!Regex.IsMatch(args[1], @"^\d+$") || !Regex.IsMatch(args[2], @"^\d+$"))
                         {
                             Log.Fatal("Invalid argument.");
                             Log.Info("Input needs to be numberic.");
                             return -1;
                         }
+
                         if (args[1].Length > 11 || args[2].Length > 11)
                         {
                             Log.Fatal("Invalid argument.");
                             Log.Info("Min and/or Max value(s) too large.");
                             return -1;
                         }
+
                         if (Convert.ToInt64(args[1]) > Convert.ToInt64(args[2]))
                         {
                             Log.Fatal("Invalid argument.");
@@ -279,7 +288,7 @@ namespace MyNumberNET_CLI
         }
 
         /// <summary>
-        ///     Fill the value to 12 didits
+        ///     Fill the value to 12 digits
         /// </summary>
         /// <param name="input">Digits to fill</param>
         /// <param name="mode">Mode of operation</param>
@@ -365,6 +374,7 @@ namespace MyNumberNET_CLI
                 input[i + 1]++;
                 input[i] = 0;
             }
+
             Array.Reverse(input);
             return input;
         }
