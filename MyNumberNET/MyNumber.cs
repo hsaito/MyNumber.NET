@@ -60,7 +60,7 @@ namespace MyNumberNET
         public int[] GenerateRandomNumber()
         {
             var result = new int[12];
-            for (var i = 0; i < 10; i++)
+            for (var i = 0; i < 11; i++)
                 result[i] = _random.Next(0, 9);
 
             result[11] = CalculateCheckDigits(Truncate(result));
