@@ -13,6 +13,7 @@ pipeline {
 	    steps {
 		echo 'Testing..'
 		powershell label: '', script: '''dotnet restore; dotnet test -c Release'''
+            }
 	}
         stage('Deploy') {
             steps {
