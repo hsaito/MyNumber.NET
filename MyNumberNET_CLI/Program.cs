@@ -4,9 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml;
-using log4net;
-using log4net.Config;
-using log4net.Repository.Hierarchy;
+using NLog;
 using MyNumberNET;
 using static System.Char;
 
@@ -14,19 +12,17 @@ namespace MyNumberNET_CLI
 {
     public class Program
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
         public static int Main(string[] args)
         {
             try
             {
-                var result = InitializeLogging();
-                if (!result)
-                    throw new Exception("Logging could not be enabled.");
+                // NLog automatically loads nlog.config, no manual initialization needed
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex.Message);
+                Log.Fatal(ex, ex.Message);
                 return -1;
             }
 
@@ -183,8 +179,7 @@ namespace MyNumberNET_CLI
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex.Message);
-                Log.Debug(ex.StackTrace);
+                Log.Fatal(ex, ex.Message);
                 return -1;
             }
         }
@@ -379,32 +374,6 @@ namespace MyNumberNET_CLI
             return input;
         }
 
-        /// <summary>
-        ///     Initialize logging
-        /// </summary>
-        private static bool InitializeLogging()
-        {
-            try
-            {
-                // Configuration for logging
-                var log4NetConfig = new XmlDocument();
-
-                using (var reader = new StreamReader(new FileStream("log4net.config", FileMode.Open, FileAccess.Read)))
-                {
-                    log4NetConfig.Load(reader);
-                }
-
-                var rep = LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(Hierarchy));
-                XmlConfigurator.Configure(rep, log4NetConfig["log4net"]);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error initializing the logging.");
-                Console.WriteLine(ex.Message);
-                return false;
-            }
-        }
 
         private enum RangeMode
         {
