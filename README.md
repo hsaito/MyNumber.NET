@@ -50,5 +50,11 @@ dotnet test MyNumberNET_Test
    ```
 3. Run CLI or tests as shown above.
 
+## .NET Version
+All projects now target **.NET 8 (net8.0)**. You need the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) to build and run.
+
+## Logging
+The CLI uses **NLog** for logging. Configuration is in `MyNumberNET_CLI/nlog.config`.
+
 ## License
 See LICENSE for details.
