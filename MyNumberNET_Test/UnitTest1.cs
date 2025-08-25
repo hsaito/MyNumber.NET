@@ -55,5 +55,45 @@ namespace MyNumberNET_Test
                 .Select(subject => Array.ConvertAll(subject, c => (int) char.GetNumericValue(c)))
                 .Any(MyNumber.VerifyNumber)) throw new Exception("Validation failed.");
         }
+
+        [TestMethod]
+        public void VerifyNumber_NullInput_ThrowsException()
+        {
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => MyNumber.VerifyNumber(null));
+        }
+
+        [TestMethod]
+        public void VerifyNumber_WrongLength_ThrowsException()
+        {
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => MyNumber.VerifyNumber(new int[10]));
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => MyNumber.VerifyNumber(new int[13]));
+        }
+
+        [TestMethod]
+        public void VerifyNumber_InvalidDigits_ThrowsException()
+        {
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => MyNumber.VerifyNumber(new int[] { 1,2,3,4,5,6,7,8,9,10,11,12 }));
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => MyNumber.VerifyNumber(new int[] { -1,2,3,4,5,6,7,8,9,0,1,2 }));
+        }
+
+        [TestMethod]
+        public void CalculateCheckDigits_NullInput_ThrowsException()
+        {
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => MyNumber.CalculateCheckDigits(null));
+        }
+
+        [TestMethod]
+        public void CalculateCheckDigits_WrongLength_ThrowsException()
+        {
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => MyNumber.CalculateCheckDigits(new int[10]));
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => MyNumber.CalculateCheckDigits(new int[12]));
+        }
+
+        [TestMethod]
+        public void CalculateCheckDigits_InvalidDigits_ThrowsException()
+        {
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => MyNumber.CalculateCheckDigits(new int[] { 1,2,3,4,5,6,7,8,9,10,11 }));
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => MyNumber.CalculateCheckDigits(new int[] { -1,2,3,4,5,6,7,8,9,0,1 }));
+        }
     }
 }

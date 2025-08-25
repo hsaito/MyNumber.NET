@@ -178,7 +178,17 @@ namespace MyNumberNET_CLI
         {
             var n = new MyNumber();
             for (var i = 0; i < count; i++)
-                Console.WriteLine(string.Join("", n.GenerateRandomNumber()));
+            {
+                try
+                {
+                    Console.WriteLine(string.Join("", n.GenerateRandomNumber()));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Error generating My Number");
+                    Console.WriteLine($"Error generating My Number: {ex.Message}");
+                }
+            }
         }
 
         /// <summary>
@@ -188,9 +198,23 @@ namespace MyNumberNET_CLI
         /// <returns>Validation result</returns>
         private static bool Check(string number)
         {
-            var sanitized = Sanitize(number);
-
-            return MyNumber.VerifyNumber(sanitized);
+            try
+            {
+                var sanitized = Sanitize(number);
+                return MyNumber.VerifyNumber(sanitized);
+            }
+            catch (MyNumber.MyNumberMalformedException ex)
+            {
+                Log.Error(ex, "Malformed My Number input");
+                Console.WriteLine($"Malformed My Number input: {ex.Message}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error checking My Number");
+                Console.WriteLine($"Error checking My Number: {ex.Message}");
+                return false;
+            }
         }
 
         /// <summary>
@@ -200,10 +224,24 @@ namespace MyNumberNET_CLI
         /// <returns>Resulting "My Number"</returns>
         private static string Complete(string number)
         {
-            var sanitized = Sanitize(number);
-
-            var sum = MyNumber.CalculateCheckDigits(sanitized);
-            return number + sum;
+            try
+            {
+                var sanitized = Sanitize(number);
+                var sum = MyNumber.CalculateCheckDigits(sanitized);
+                return number + sum;
+            }
+            catch (MyNumber.MyNumberMalformedException ex)
+            {
+                Log.Error(ex, "Malformed My Number input");
+                Console.WriteLine($"Malformed My Number input: {ex.Message}");
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error completing My Number");
+                Console.WriteLine($"Error completing My Number: {ex.Message}");
+                return string.Empty;
+            }
         }
 
         /// <summary>
@@ -225,22 +263,33 @@ namespace MyNumberNET_CLI
         /// <param name="max">Maximum value</param>
         private static void RangeN(string min, string max)
         {
-            var minFilled = Fill(min, RangeMode.Numerical);
-            var maxFilled = Fill(max, RangeMode.Numerical);
-
-            Log.Debug("Filled min: " + minFilled);
-            Log.Debug("Filled max: " + maxFilled);
-
-
-            var value = Array.ConvertAll(minFilled.ToCharArray(), c => (int) GetNumericValue(c));
-            var stop = Array.ConvertAll(maxFilled.ToCharArray(), c => (int) GetNumericValue(c));
-
-            do
+            try
             {
-                if (MyNumber.VerifyNumber(value))
-                    Console.WriteLine(string.Join("", value));
-                value = Increment(value);
-            } while (!Compare(value, stop, RangeMode.Numerical) && value != null);
+                var minFilled = Fill(min, RangeMode.Numerical);
+                var maxFilled = Fill(max, RangeMode.Numerical);
+                Log.Debug("Filled min: " + minFilled);
+                Log.Debug("Filled max: " + maxFilled);
+                var value = Array.ConvertAll(minFilled.ToCharArray(), c => (int) GetNumericValue(c));
+                var stop = Array.ConvertAll(maxFilled.ToCharArray(), c => (int) GetNumericValue(c));
+                do
+                {
+                    try
+                    {
+                        if (MyNumber.VerifyNumber(value))
+                            Console.WriteLine(string.Join("", value));
+                    }
+                    catch (MyNumber.MyNumberMalformedException ex)
+                    {
+                        Log.Error(ex, "Malformed My Number in range");
+                    }
+                    value = Increment(value);
+                } while (!Compare(value, stop, RangeMode.Numerical) && value != null);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error generating range (numerical)");
+                Console.WriteLine($"Error generating range: {ex.Message}");
+            }
         }
 
         /// <summary>
@@ -250,22 +299,33 @@ namespace MyNumberNET_CLI
         /// <param name="max">Maximum value</param>
         private static void RangeS(string min, string max)
         {
-            var minFilled = Fill(min, RangeMode.Sequential);
-            var maxFilled = Fill(max, RangeMode.Sequential);
-
-            Log.Debug("Filled min: " + minFilled);
-            Log.Debug("Filled max: " + maxFilled);
-
-
-            var value = Array.ConvertAll(minFilled.ToCharArray(), c => (int) GetNumericValue(c));
-            var stop = Array.ConvertAll(maxFilled.ToCharArray(), c => (int) GetNumericValue(c));
-
-            do
+            try
             {
-                var checkDigit = MyNumber.CalculateCheckDigits(value);
-                Console.WriteLine(string.Join("", value) + checkDigit);
-                value = Increment(value);
-            } while (!Compare(value, stop, RangeMode.Sequential) && value != null);
+                var minFilled = Fill(min, RangeMode.Sequential);
+                var maxFilled = Fill(max, RangeMode.Sequential);
+                Log.Debug("Filled min: " + minFilled);
+                Log.Debug("Filled max: " + maxFilled);
+                var value = Array.ConvertAll(minFilled.ToCharArray(), c => (int) GetNumericValue(c));
+                var stop = Array.ConvertAll(maxFilled.ToCharArray(), c => (int) GetNumericValue(c));
+                do
+                {
+                    try
+                    {
+                        if (MyNumber.VerifyNumber(value))
+                            Console.WriteLine(string.Join("", value));
+                    }
+                    catch (MyNumber.MyNumberMalformedException ex)
+                    {
+                        Log.Error(ex, "Malformed My Number in range");
+                    }
+                    value = Increment(value);
+                } while (!Compare(value, stop, RangeMode.Sequential) && value != null);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error generating range (sequential)");
+                Console.WriteLine($"Error generating range: {ex.Message}");
+            }
         }
 
         /// <summary>
