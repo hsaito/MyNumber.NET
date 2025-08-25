@@ -1,15 +1,60 @@
 # My Number Library for .NET
 
-This library facilitates validation of the [My Number](http://www.cao.go.jp/bangouseido/), also known as Social Security and Tax Number System. 
+This repository provides tools for validating and generating Japanese My Number (Social Security and Tax Number System) in .NET.
 
-## MyNumber.NET
+## Projects
 
-A library to validate the My Number.
+### MyNumberNET
+A .NET library for validating and generating My Number sequences.
 
-## MyNumber.NET_CLI
+**Features:**
+- Validate a 12-digit My Number: `MyNumber.VerifyNumber(int[] number)`
+- Calculate check digit for first 11 digits: `MyNumber.CalculateCheckDigits(int[] number)`
+- Exception handling for malformed input
 
-A CLI interface that calls *MyNumber.NET*.
+**Example Usage:**
+```csharp
+using MyNumberNET;
+int[] number = {6,1,4,1,0,6,5,2,6,0,0,0};
+bool isValid = MyNumber.VerifyNumber(number);
+```
 
-## MyNumber.NET_Test
+### MyNumberNET_CLI
+A command-line interface for validating and generating My Numbers.
 
-Unit test for the above.
+**Usage:**
+```
+dotnet run --project MyNumberNET_CLI [command] [arguments]
+```
+**Commands:**
+- `generate [count]` : Generate valid My Numbers
+- `check [My Number]` : Validate a given number
+- `complete [first 11 digits]` : Complete a number by calculating the check digit
+- `rangen [min] [max]` : Generate numbers in a numerical range
+- `ranges [min] [max]` : Generate numbers in a sequential range
+
+### MyNumberNET_Test
+Unit tests for the library.
+
+**To run tests:**
+```
+dotnet test MyNumberNET_Test
+```
+
+## Build Instructions
+
+1. Clone the repository.
+2. Build the solution:
+   ```
+   dotnet build MyNumberNET.sln
+   ```
+3. Run CLI or tests as shown above.
+
+## .NET Version
+All projects now target **.NET 8 (net8.0)**. You need the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) to build and run.
+
+## Logging
+The CLI uses **NLog** for logging. Configuration is in `MyNumberNET_CLI/nlog.config`.
+
+## License
+See LICENSE for details.

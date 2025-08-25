@@ -1,8 +1,0 @@
-language: csharp
-solution: MyNumberNET.sln
-mono: none
-dotnet: 3.0.100
-script:
- - dotnet restore
- - dotnet build
- - dotnet test MyNumberNET_Test
