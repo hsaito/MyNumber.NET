@@ -1,11 +1,19 @@
 # My Number Library for .NET
 
-This repository provides tools for validating and generating Japanese My Number (Social Security and Tax Number System) in .NET.
+This repository provides tools for validating and generating Japanese My Number (Social Security and Tax Number System) in .NET 8.0.
+
+## Project Structure
+
+- **MyNumberNET/**: Core .NET 8.0 library for My Number validation and generation.
+- **MyNumberNET_CLI/**: Command-line interface for interacting with the library. Uses NLog for logging.
+- **MyNumberNET_Test/**: Unit tests for the library.
+- **Dockerfile**: Containerization support for CLI or library usage.
+- **Jenkinsfile**: CI/CD pipeline configuration.
 
 ## Projects
 
 ### MyNumberNET
-A .NET library for validating and generating My Number sequences.
+A .NET 8.0 library for validating and generating My Number sequences.
 
 **Features:**
 - Validate a 12-digit My Number: `MyNumber.VerifyNumber(int[] number)`
@@ -20,11 +28,15 @@ bool isValid = MyNumber.VerifyNumber(number);
 ```
 
 ### MyNumberNET_CLI
-A command-line interface for validating and generating My Numbers.
+A command-line interface for validating and generating My Numbers. Uses NLog for logging.
 
 **Usage:**
 ```
 dotnet run --project MyNumberNET_CLI [command] [arguments]
+```
+Or run the built executable directly:
+```
+MyNumberNET_CLI\bin\Debug\net8.0\MyNumberNET_CLI.exe [command] [arguments]
 ```
 **Commands:**
 - `generate [count]` : Generate valid My Numbers
@@ -48,13 +60,22 @@ dotnet test MyNumberNET_Test
    ```
    dotnet build MyNumberNET.sln
    ```
-3. Run CLI or tests as shown above.
 
-## .NET Version
-All projects now target **.NET 8 (net8.0)**. You need the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) to build and run.
+## Docker Support
 
-## Logging
-The CLI uses **NLog** for logging. Configuration is in `MyNumberNET_CLI/nlog.config`.
+To build and run the CLI in a container:
+```
+docker build -t mynumbernet-cli .
+docker run --rm mynumbernet-cli [command] [arguments]
+```
+
+## CI/CD
+
+Automated builds and tests are configured via Jenkinsfile.
+
+## Requirements
+- .NET 8.0 SDK
+- (Optional) Docker for containerization
 
 ## License
 See LICENSE for details.
