@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>Hideki Saito</Authors>
     <Company>Hideki Saito</Company>
     <Title>MyNumber My Number Validation Command Line Tool</Title>
@@ -11,20 +11,33 @@
     <Copyright>Copyright (c) 2017 Hideki Saito</Copyright>
     <PackageLicenseUrl>https://github.com/hsaito/MyNumber.NET/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/hsaito/MyNumber.NET</PackageProjectUrl>
-    <Version>1.0.4.0</Version>
-    <AssemblyVersion>1.0.4.0</AssemblyVersion>
-    <FileVersion>1.0.4.0</FileVersion>
+    <Version>1.0.5.0</Version>
+    <AssemblyVersion>1.0.5.0</AssemblyVersion>
+    <FileVersion>1.0.5.0</FileVersion>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <None Update="nlog.config">
+    <None Update="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NLog" Version="6.0.3" />
+    <PackageReference Include="log4net" Version="3.2.0" />
+    <PackageReference Include="System.Console" Version="4.3.1" />
+    <PackageReference Include="System.Net.Sockets" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyNumberNET\MyNumberNET.csproj" />
   </ItemGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Deterministic>true</Deterministic>
+    <DeterministicSourceRoot>/_/</DeterministicSourceRoot>
+    <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..\'))</RepoRoot>
+    <PathMap>$(RepoRoot)=$(DeterministicSourceRoot)</PathMap>
+  </PropertyGroup>
 </Project>
