@@ -16,33 +16,37 @@ namespace MyNumberNET_CLI
 
         public static int Main(string[] args)
         {
+            Log.Info($"Application started. Args: [{string.Join(", ", args)}]");
             try
             {
                 // NLog automatically loads nlog.config, no manual initialization needed
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, ex.Message);
+                Log.Fatal(ex, "Fatal error during logger initialization");
                 return -1;
             }
 
             if (args.Length < 1)
             {
-                Log.Fatal("Not enough argument.");
+                Log.Warn("Not enough argument.");
                 Log.Info("Usage: command [arg]");
                 Log.Info("Commands: generate [count]/ check [My Number] / complete [first 11 digits of My Number]");
                 Log.Info("rangen [minimum] [maximum] / ranges [minimum [maximum]");
-                Log.Info("Range functionss are rangen (numerical range), and ranges (sequential range)");
+                Log.Info("Range functions are rangen (numerical range), and ranges (sequential range)");
                 return -1;
             }
 
             try
             {
+                Log.Info($"Executing command: {args[0]}");
                 switch (args[0])
                 {
                     case "generate":
+                        Log.Debug($"generate args: {string.Join(", ", args)}");
                         if (args.Length == 1)
                         {
+                            Log.Info("Generating 1 My Number");
                             Generate(1);
                             return 0;
                         }
@@ -50,136 +54,118 @@ namespace MyNumberNET_CLI
                         {
                             if (!Regex.IsMatch(args[1], @"^\d+$"))
                             {
-                                Log.Fatal("Invalid argument.");
-                                Log.Info("Input needs to be numberic.");
+                                Log.Warn("Invalid argument for generate: not numeric");
+                                Log.Info("Input needs to be numeric.");
                                 return -1;
                             }
-
+                            Log.Info($"Generating {args[1]} My Numbers");
                             Generate(Convert.ToInt64(args[1]));
                             return 0;
                         }
-
                     case "check":
+                        Log.Debug($"check args: {string.Join(", ", args)}");
                         if (args.Length < 2)
                         {
-                            Log.Fatal("Not enough argument.");
+                            Log.Warn("Not enough argument for check");
                             Log.Info("Supply \"My Number\" to check");
                             return -1;
                         }
-
                         if (!Regex.IsMatch(args[1], @"^\d+$"))
                         {
-                            Log.Fatal("Invalid argument.");
-                            Log.Info("Input needs to be numberic.");
+                            Log.Warn("Invalid argument for check: not numeric");
+                            Log.Info("Input needs to be numeric.");
                             return -1;
                         }
-
-                        if (Check(args[1]))
-                        {
-                            Console.WriteLine("OK");
-                            return 0;
-                        }
-                        else
-                        {
-                            Console.WriteLine("ERROR");
-                            return 1;
-                        }
-
+                        Log.Info($"Checking My Number: {args[1]}");
+                        bool result = Check(args[1]);
+                        Log.Info($"Check result for {args[1]}: {(result ? "OK" : "ERROR")}");
+                        Console.WriteLine(result ? "OK" : "ERROR");
+                        return result ? 0 : 1;
                     case "complete":
-                    {
+                        Log.Debug($"complete args: {string.Join(", ", args)}");
                         if (args.Length < 2)
                         {
-                            Log.Fatal("Not enough argument.");
+                            Log.Warn("Not enough argument for complete");
                             Log.Info("Supply the first 11 digits of \"My Number\" to complete");
                             return -1;
                         }
-
                         if (!Regex.IsMatch(args[1], @"^\d+$"))
                         {
-                            Log.Fatal("Invalid argument.");
-                            Log.Info("Input needs to be numberic.");
+                            Log.Warn("Invalid argument for complete: not numeric");
+                            Log.Info("Input needs to be numeric.");
                             return -1;
                         }
-
-                        Console.WriteLine(Complete(args[1]));
+                        Log.Info($"Completing My Number for: {args[1]}");
+                        string completed = Complete(args[1]);
+                        Log.Info($"Completed My Number: {completed}");
+                        Console.WriteLine(completed);
                         return 0;
-                    }
-
                     case "rangen":
-                    {
+                        Log.Debug($"rangen args: {string.Join(", ", args)}");
                         if (args.Length < 3)
                         {
-                            Log.Fatal("Not enough argument.");
+                            Log.Warn("Not enough argument for rangen");
                             Log.Info("Supply two numbers for range.");
-                        }
-
-                        if (!Regex.IsMatch(args[1], @"^\d+$") || !Regex.IsMatch(args[2], @"^\d+$"))
-                        {
-                            Log.Fatal("Invalid argument.");
-                            Log.Info("Input needs to be numberic.");
                             return -1;
                         }
-
+                        if (!Regex.IsMatch(args[1], @"^\d+$") || !Regex.IsMatch(args[2], @"^\d+$"))
+                        {
+                            Log.Warn("Invalid argument for rangen: not numeric");
+                            Log.Info("Input needs to be numeric.");
+                            return -1;
+                        }
                         if (args[1].Length > 12 || args[2].Length > 12)
                         {
-                            Log.Fatal("Invalid argument.");
+                            Log.Warn("Min and/or Max value(s) too large for rangen");
                             Log.Info("Min and/or Max value(s) too large.");
                             return -1;
                         }
-
                         if (Convert.ToInt64(args[1]) > Convert.ToInt64(args[2]))
                         {
-                            Log.Fatal("Invalid argument.");
+                            Log.Warn("Max value must be larger than Min for rangen");
                             Log.Info("Max value must be larger than Min");
                             return -1;
                         }
-
+                        Log.Info($"Generating range (numerical) from {args[1]} to {args[2]}");
                         RangeN(args[1], args[2]);
-
                         return 0;
-                    }
-
                     case "ranges":
-                    {
+                        Log.Debug($"ranges args: {string.Join(", ", args)}");
                         if (args.Length < 3)
                         {
-                            Log.Fatal("Not enough argument.");
+                            Log.Warn("Not enough argument for ranges");
                             Log.Info("Supply two numbers for range.");
-                        }
-
-                        if (!Regex.IsMatch(args[1], @"^\d+$") || !Regex.IsMatch(args[2], @"^\d+$"))
-                        {
-                            Log.Fatal("Invalid argument.");
-                            Log.Info("Input needs to be numberic.");
                             return -1;
                         }
-
+                        if (!Regex.IsMatch(args[1], @"^\d+$") || !Regex.IsMatch(args[2], @"^\d+$"))
+                        {
+                            Log.Warn("Invalid argument for ranges: not numeric");
+                            Log.Info("Input needs to be numeric.");
+                            return -1;
+                        }
                         if (args[1].Length > 11 || args[2].Length > 11)
                         {
-                            Log.Fatal("Invalid argument.");
+                            Log.Warn("Min and/or Max value(s) too large for ranges");
                             Log.Info("Min and/or Max value(s) too large.");
                             return -1;
                         }
-
                         if (Convert.ToInt64(args[1]) > Convert.ToInt64(args[2]))
                         {
-                            Log.Fatal("Invalid argument.");
+                            Log.Warn("Max value must be larger than Min for ranges");
                             Log.Info("Max value must be larger than Min");
                             return -1;
                         }
-
+                        Log.Info($"Generating range (sequential) from {args[1]} to {args[2]}");
                         RangeS(args[1], args[2]);
-
                         return 0;
-                    }
-
                     default:
+                        Log.Error($"Unknown command: {args[0]}");
                         throw new ArgumentOutOfRangeException(args[0]);
                 }
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, ex.Message);
+                Log.Error(ex, $"Unhandled exception in command: {args[0]}");
                 return -1;
             }
         }
