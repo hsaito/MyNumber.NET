@@ -18,6 +18,13 @@ namespace MyNumberNET_ApiServer.Controllers
         [HttpPost("verify")]
         public ActionResult<bool> Verify([FromBody] int[] number)
         {
+            // Input validation before calling business logic
+            if (number == null)
+                return BadRequest("Input array is null.");
+            if (number.Length != 12)
+                return BadRequest("Malformed sequence. Must be 12 digits.");
+            if (number.Any(n => n < 0 || n > 9))
+                return BadRequest("All digits must be between 0 and 9.");
             try
             {
                 bool isValid = MyNumber.VerifyNumber(number);
@@ -37,6 +44,13 @@ namespace MyNumberNET_ApiServer.Controllers
         [HttpPost("checkdigit")]
         public ActionResult<int> CheckDigit([FromBody] int[] number)
         {
+            // Input validation before calling business logic
+            if (number == null)
+                return BadRequest("Input array is null.");
+            if (number.Length != 11)
+                return BadRequest("Malformed sequence. Must be 11 digits.");
+            if (number.Any(n => n < 0 || n > 9))
+                return BadRequest("All digits must be between 0 and 9.");
             try
             {
                 int checkDigit = MyNumber.CalculateCheckDigits(number);

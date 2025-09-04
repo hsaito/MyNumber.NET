@@ -40,13 +40,11 @@ namespace MyNumberNET
                 throw new MyNumberMalformedException("Malformed sequence. Must be 11 digits.");
             if (Array.Exists(number, n => n < 0 || n > 9))
                 throw new MyNumberMalformedException("All digits must be between 0 and 9.");
-            Array.Reverse(number);
             var sum = 0;
             for (var n = 1; n < 7; n++)
-                sum += (n + 1) * number[n - 1];
+                sum += (n + 1) * number[11 - n];
             for (var n = 7; n < 12; n++)
-                sum += (n - 5) * number[n - 1];
-            Array.Reverse(number);
+                sum += (n - 5) * number[11 - n];
             if (sum % 11 <= 1)
                 return 0;
             return 11 - sum % 11;
