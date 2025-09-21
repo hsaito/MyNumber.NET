@@ -29,6 +29,40 @@ int[] number = {6,1,4,1,0,6,5,2,6,0,0,0};
 bool isValid = MyNumber.VerifyNumber(number);
 ```
 
+### MyNumberValue (new)
+
+An immutable, strongly-typed value object that encapsulates a validated My Number. Constructing a `MyNumberValue` will validate format and check digit, making it safer to pass My Number values in code and APIs.
+
+Key points:
+- Immutable and validated on creation.
+- Construct from `int[]`, `string`, or individual digits.
+- `TryParse`/`Parse` available for safe parsing.
+- Provides `ToString(format)` with formats: `N` (plain), `S` (spaces), `H` (hyphens), `G` (grouped).
+
+Example usage:
+```csharp
+using MyNumberNET;
+
+// Parse from string
+var value = MyNumberValue.Parse("614106526000");
+
+// Safe parse
+if (MyNumberValue.TryParse("6141-0652-6000", out var parsed))
+{
+	Console.WriteLine(parsed.ToString("H")); // 6141-0652-6000
+}
+
+// Create from first 11 digits (check digit calculated)
+var complete = MyNumberValue.FromFirstElevenDigits(new int[] {6,1,4,1,0,6,5,2,6,0,0});
+
+// Generate random valid My Number
+var random = MyNumberValue.GenerateRandom();
+
+// Implicit conversions to `string` and `int[]`
+string s = random; // "614106526000"
+int[] digits = random;
+```
+
 ### MyNumberNET_ApiServer
 ASP.NET Core Web API for validating and generating My Numbers.
 
