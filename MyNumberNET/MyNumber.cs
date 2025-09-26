@@ -40,9 +40,16 @@ namespace MyNumberNET
                 throw new MyNumberMalformedException("Malformed sequence. Must be 11 digits.");
             if (Array.Exists(number, n => n < 0 || n > 9))
                 throw new MyNumberMalformedException("All digits must be between 0 and 9.");
+            
+            // Calculate check digit using the official My Number algorithm
+            // Process digits from right to left with specific weights
+            // Array indexing: number[11-n] safely accesses indices 10,9,8,...,0 for n=1,2,3,...,11
+            // This avoids Array.Reverse() while maintaining correct algorithm behavior
             var sum = 0;
+            // First loop: rightmost 6 digits (indices 10,9,8,7,6,5) with weights 2,3,4,5,6,7
             for (var n = 1; n < 7; n++)
                 sum += (n + 1) * number[11 - n];
+            // Second loop: leftmost 5 digits (indices 4,3,2,1,0) with weights 2,3,4,5,6
             for (var n = 7; n < 12; n++)
                 sum += (n - 5) * number[11 - n];
             if (sum % 11 <= 1)
