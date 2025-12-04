@@ -16,17 +16,6 @@
     <MyNumberNETTestVersion>1.0.5.0</MyNumberNETTestVersion>
   </PropertyGroup>
 
-  <!-- Package Dependency Versions -->
-  <PropertyGroup>
-    <NLogVersion>6.0.6</NLogVersion>
-    <SystemConsoleVersion>4.3.1</SystemConsoleVersion>
-    <SystemNetSocketsVersion>4.3.0</SystemNetSocketsVersion>
-    <MicrosoftNETTestSdkVersion>18.0.1</MicrosoftNETTestSdkVersion>
-    <MSTestTestAdapterVersion>4.0.2</MSTestTestAdapterVersion>
-    <MSTestTestFrameworkVersion>4.0.2</MSTestTestFrameworkVersion>
-    <XunitVersion>2.9.3</XunitVersion>
-  </PropertyGroup>
-
   <!-- Build Properties -->
   <PropertyGroup>
     <Deterministic>true</Deterministic>
