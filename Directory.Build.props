@@ -1,0 +1,26 @@
+<Project>
+  <!-- Shared Version Properties -->
+  <PropertyGroup>
+    <Authors>Hideki Saito</Authors>
+    <Company>Hideki Saito</Company>
+    <Copyright>Copyright (c) 2025 Hideki Saito</Copyright>
+    <PackageLicenseUrl>https://github.com/hsaito/MyNumber.NET/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/hsaito/MyNumber.NET</PackageProjectUrl>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <!-- Library Versions -->
+  <PropertyGroup>
+    <MyNumberNETVersion>1.0.7.0</MyNumberNETVersion>
+    <MyNumberNETCliVersion>1.0.7.0</MyNumberNETCliVersion>
+    <MyNumberNETTestVersion>1.0.7.0</MyNumberNETTestVersion>
+  </PropertyGroup>
+
+  <!-- Build Properties -->
+  <PropertyGroup>
+    <Deterministic>true</Deterministic>
+    <DeterministicSourceRoot>/_/</DeterministicSourceRoot>
+    <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))</RepoRoot>
+    <PathMap>$(RepoRoot)=$(DeterministicSourceRoot)</PathMap>
+  </PropertyGroup>
+</Project>

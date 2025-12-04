@@ -25,22 +25,22 @@ namespace MyNumberNET_Test
         public void Constructor_InvalidDigits_ThrowsException()
         {
             // Act & Assert
-            Assert.ThrowsException<MyNumber.MyNumberMalformedException>(() => new MyNumberValue(_invalidMyNumber));
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => new MyNumberValue(_invalidMyNumber));
         }
 
         [TestMethod]
         public void Constructor_NullDigits_ThrowsException()
         {
             // Act & Assert
-            Assert.ThrowsException<MyNumber.MyNumberMalformedException>(() => new MyNumberValue(null));
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => new MyNumberValue(null));
         }
 
         [TestMethod]
         public void Constructor_WrongLength_ThrowsException()
         {
             // Act & Assert
-            Assert.ThrowsException<MyNumber.MyNumberMalformedException>(() => new MyNumberValue(new int[10]));
-            Assert.ThrowsException<MyNumber.MyNumberMalformedException>(() => new MyNumberValue(new int[13]));
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => new MyNumberValue(new int[10]));
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => new MyNumberValue(new int[13]));
         }
 
         [TestMethod]
@@ -72,9 +72,9 @@ namespace MyNumberNET_Test
         public void FromFirstElevenDigits_InvalidLength_ThrowsException()
         {
             // Act & Assert
-            Assert.ThrowsException<MyNumber.MyNumberMalformedException>(() => 
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => 
                 MyNumberValue.FromFirstElevenDigits(new int[10]));
-            Assert.ThrowsException<MyNumber.MyNumberMalformedException>(() => 
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => 
                 MyNumberValue.FromFirstElevenDigits(null));
         }
 
@@ -154,7 +154,7 @@ namespace MyNumberNET_Test
         public void Parse_InvalidString_ThrowsException()
         {
             // Act & Assert
-            Assert.ThrowsException<ArgumentException>(() => MyNumberValue.Parse("invalid"));
+            Assert.ThrowsExactly<ArgumentException>(() => MyNumberValue.Parse("invalid"));
         }
 
         [TestMethod]
@@ -204,7 +204,7 @@ namespace MyNumberNET_Test
             var myNumber = new MyNumberValue(_validMyNumber);
 
             // Act & Assert
-            Assert.ThrowsException<FormatException>(() => myNumber.ToString("X"));
+            Assert.ThrowsExactly<FormatException>(() => myNumber.ToString("X"));
         }
 
         [TestMethod]
@@ -311,14 +311,14 @@ namespace MyNumberNET_Test
         public void ExplicitConversion_FromInvalidIntArray_ThrowsException()
         {
             // Act & Assert
-            Assert.ThrowsException<MyNumber.MyNumberMalformedException>(() => (MyNumberValue)_invalidMyNumber);
+            Assert.ThrowsExactly<MyNumber.MyNumberMalformedException>(() => (MyNumberValue)_invalidMyNumber);
         }
 
         [TestMethod]
         public void ExplicitConversion_FromInvalidString_ThrowsException()
         {
             // Act & Assert
-            Assert.ThrowsException<ArgumentException>(() => (MyNumberValue)"invalid");
+            Assert.ThrowsExactly<ArgumentException>(() => (MyNumberValue)"invalid");
         }
 
         [TestMethod]
@@ -343,7 +343,7 @@ namespace MyNumberNET_Test
             var myNumber = new MyNumberValue();
 
             // Act & Assert
-            Assert.ThrowsException<InvalidOperationException>(() => myNumber.Digits);
+            Assert.ThrowsExactly<InvalidOperationException>(() => myNumber.Digits);
         }
 
         [TestMethod]
@@ -353,7 +353,7 @@ namespace MyNumberNET_Test
             var myNumber = new MyNumberValue();
 
             // Act & Assert
-            Assert.ThrowsException<InvalidOperationException>(() => myNumber.ToString());
+            Assert.ThrowsExactly<InvalidOperationException>(() => myNumber.ToString());
         }
     }
 }
