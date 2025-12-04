@@ -1,25 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Authors>Hideki Saito</Authors>
-    <Company>Hideki Saito</Company>
     <Title>MyNumberNET My Number Validation Library</Title>
     <Product>MyNumberNET</Product>
     <PackageId>MyNumberNET</PackageId>
     <Description>My Number for .NET (Library)</Description>
-    <Copyright>Copyright (c) 2019 Hideki Saito</Copyright>
-    <PackageLicenseUrl>https://github.com/hsaito/MyNumber.NET/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/hsaito/MyNumber.NET</PackageProjectUrl>
-    <Version>1.0.6.0</Version>
-    <AssemblyVersion>1.0.6.0</AssemblyVersion>
-    <FileVersion>1.0.6.0</FileVersion>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <Deterministic>true</Deterministic>
-    <DeterministicSourceRoot>/_/</DeterministicSourceRoot>
-    <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..\'))</RepoRoot>
-    <PathMap>$(RepoRoot)=$(DeterministicSourceRoot)</PathMap>
+    <Version>$(MyNumberNETVersion)</Version>
+    <AssemblyVersion>$(MyNumberNETVersion)</AssemblyVersion>
+    <FileVersion>$(MyNumberNETVersion)</FileVersion>
   </PropertyGroup>
 </Project>
