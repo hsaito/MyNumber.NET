@@ -502,3 +502,6 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
+
+# Snyk Security Extension - AI Rules (auto-generated)
+.github/instructions/snyk_rules.instructions.md
