@@ -2,21 +2,21 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy solution and project files
-COPY ["MyNumberNET_ApiServer/MyNumberNET_ApiServer.csproj", "MyNumberNET_ApiServer/"]
+# Copy project files
 COPY ["MyNumberNET/MyNumberNET.csproj", "MyNumberNET/"]
-COPY ["MyNumberNET.sln", "."]
+COPY ["MyNumberNET_ApiServer/MyNumberNET_ApiServer.csproj", "MyNumberNET_ApiServer/"]
 COPY ["Directory.Build.props", "."]
 COPY ["global.json", "."]
 
 # Restore dependencies
-RUN dotnet restore "MyNumberNET.sln"
+RUN dotnet restore "MyNumberNET_ApiServer/MyNumberNET_ApiServer.csproj"
 
-# Copy remaining source
-COPY . .
+# Copy source files
+COPY ["MyNumberNET/", "MyNumberNET/"]
+COPY ["MyNumberNET_ApiServer/", "MyNumberNET_ApiServer/"]
 
 # Build application
-RUN dotnet build "MyNumberNET.sln" -c Release --no-restore
+RUN dotnet build "MyNumberNET_ApiServer/MyNumberNET_ApiServer.csproj" -c Release --no-restore
 
 # Publish application
 RUN dotnet publish "MyNumberNET_ApiServer/MyNumberNET_ApiServer.csproj" -c Release -o /app/publish --no-build
